@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>October Fund — Live Track Record</title>
+<meta name="description" content="Every trade, unedited. Live capital at Interactive Brokers. Track record begins August 25, 2026.">
+<meta property="og:title" content="October Fund — Live Track Record">
+<meta property="og:description" content="Every trade, unedited. Live capital at Interactive Brokers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;500;700;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07070e;
+  --panel:#0c0c16;
+  --panel-2:#11111f;
+  --line:#1d1d2c;
+  --line-soft:#16161f;
+  --violet:#a78bfa;
+  --violet-deep:#7c5cf0;
+  --cyan:#22d3ee;
+  --green:#34d399;
+  --red:#fb7185;
+  --amber:#fbbf24;
+  --text:#e9e9f2;
+  --muted:#7c7c93;
+  --muted-dim:#4d4d61;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --display:'Outfit',system-ui,sans-serif;
+  --body:'DM Sans',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--body);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.shell{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,7,14,.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-in{
+  max-width:1120px;margin:0 auto;padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{
+  font-family:var(--display);font-weight:900;font-size:16px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--text);
+  text-decoration:none;white-space:nowrap;
+}
+.brand span{color:var(--violet)}
+.nav-links{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.nav-links a{
+  font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color .2s;padding:4px 0;
+}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--text)}
+.nav-links a.on{color:var(--green)}
+
+/* ---------- HERO ---------- */
+.hero{padding:72px 0 48px}
+.live-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--green);border:1px solid rgba(52,211,153,.3);
+  background:rgba(52,211,153,.06);
+  padding:6px 13px;border-radius:2px;margin-bottom:26px;
+}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{opacity:.55;box-shadow:0 0 0 6px rgba(52,211,153,0)}}
+
+.day-line{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:8px;
+}
+.day-counter{
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.22em;
+  color:var(--violet);text-transform:uppercase;
+}
+.day-since{font-family:var(--mono);font-size:12px;color:var(--muted-dim);letter-spacing:.08em}
+
+h1{
+  font-family:var(--display);font-weight:900;
+  font-size:clamp(38px,7.2vw,68px);line-height:1.02;
+  letter-spacing:-.03em;margin-bottom:18px;
+}
+h1 em{font-style:normal;color:var(--violet)}
+.hero-sub{
+  font-size:16px;color:var(--muted);max-width:560px;margin-bottom:44px;
+}
+
+/* headline figures */
+.headline{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line-soft);border:1px solid var(--line);
+  border-radius:3px;overflow:hidden;
+}
+.hl{background:var(--panel);padding:26px 22px}
+.hl-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted-dim);margin-bottom:11px;
+}
+.hl-val{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(24px,4vw,34px);letter-spacing:-.02em;line-height:1;
+}
+.hl-note{font-family:var(--mono);font-size:11px;color:var(--muted-dim);margin-top:9px}
+.up{color:var(--green)}
+.down{color:var(--red)}
+.neutral{color:var(--text)}
+
+/* ---------- SECTIONS ---------- */
+section{padding:66px 0}
+.sec-head{margin-bottom:30px}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--violet);margin-bottom:11px;
+}
+h2{
+  font-family:var(--display);font-weight:700;font-size:clamp(22px,3.4vw,30px);
+  letter-spacing:-.02em;line-height:1.15;
+}
+.sec-note{font-size:14px;color:var(--muted);margin-top:9px;max-width:600px}
+
+/* ---------- STATS ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
+  gap:1px;background:var(--line-soft);
+  border:1px solid var(--line);border-radius:3px;overflow:hidden;
+}
+.stat{background:var(--panel);padding:20px}
+.stat-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted-dim);margin-bottom:10px;
+}
+.stat-val{font-family:var(--mono);font-weight:700;font-size:23px;letter-spacing:-.01em}
+.stat-sub{font-family:var(--mono);font-size:11px;color:var(--muted-dim);margin-top:6px}
+
+/* ---------- CURVE ---------- */
+.curve-box{
+  border:1px solid var(--line);border-radius:3px;
+  background:var(--panel);padding:22px;
+}
+.curve-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:14px;flex-wrap:wrap;margin-bottom:18px;
+}
+.curve-title{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.curve-ret{font-family:var(--mono);font-weight:700;font-size:20px}
+.canvas-wrap{position:relative;width:100%;height:270px}
+#curve{width:100%;height:100%;display:block}
+.tip{
+  position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:rgba(12,12,22,.97);border:1px solid var(--line);
+  border-radius:3px;padding:9px 12px;font-family:var(--mono);font-size:11px;
+  white-space:nowrap;z-index:5;line-height:1.65;
+}
+.tip-d{color:var(--muted-dim);margin-bottom:3px}
+
+/* ---------- TAPE (signature) ---------- */
+.tape{border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.tape-head,.tape-row{
+  display:grid;
+  grid-template-columns:44px 92px 62px 62px 1fr 78px 86px 96px;
+  gap:12px;align-items:center;
+  padding:13px 18px;
+  font-family:var(--mono);font-size:12px;
+}
+.tape-head{
+  background:var(--panel-2);border-bottom:1px solid var(--line);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-dim);
+}
+.tape-row{
+  background:var(--panel);border-bottom:1px solid var(--line-soft);
+  position:relative;
+}
+.tape-row:last-child{border-bottom:none}
+.tape-row::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;
+}
+.tape-row.w::before{background:var(--green)}
+.tape-row.l::before{background:var(--red)}
+.t-idx{color:var(--muted-dim);font-size:11px}
+.t-time{color:var(--muted);font-size:11px}
+.t-sym{color:var(--violet);font-weight:700}
+.t-side{font-size:11px;letter-spacing:.05em}
+.t-side.s{color:var(--red)}
+.t-side.b{color:var(--cyan)}
+.t-px{color:var(--muted);font-size:11px}
+.t-moon{color:var(--cyan);font-size:9px;margin-left:5px;opacity:.75;vertical-align:1px}
+.t-pts{text-align:right}
+.t-hold{text-align:right;color:var(--muted-dim);font-size:11px}
+.t-net{text-align:right;font-weight:700}
+.t-run{text-align:right;color:var(--muted);font-size:11px}
+.tape-scroll{overflow-x:auto}
+.tape-scroll::-webkit-scrollbar{height:6px}
+.tape-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
+/* ---------- DAILY ---------- */
+.daily{border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.d-head,.d-row{
+  display:grid;grid-template-columns:1fr 82px 82px 100px 110px;
+  gap:12px;padding:14px 18px;font-family:var(--mono);font-size:12px;align-items:center;
+}
+.d-head{
+  background:var(--panel-2);border-bottom:1px solid var(--line);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-dim);
+}
+.d-row{background:var(--panel);border-bottom:1px solid var(--line-soft)}
+.d-row:last-child{border-bottom:none}
+.d-date{color:var(--text)}
+.d-num{text-align:right;color:var(--muted)}
+.d-net{text-align:right;font-weight:700}
+.d-eq{text-align:right;color:var(--muted)}
+
+/* ---------- STANDING NOTE ---------- */
+.note{
+  border:1px solid var(--line);border-left:2px solid var(--amber);
+  border-radius:3px;background:var(--panel);padding:26px 28px;
+}
+.note-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:13px;
+}
+.note p{font-size:15px;color:var(--muted);margin-bottom:12px;max-width:660px}
+.note p:last-child{margin-bottom:0}
+.note strong{color:var(--text);font-weight:500}
+
+/* ---------- FOOTER ---------- */
+footer{
+  border-top:1px solid var(--line-soft);padding:44px 0 58px;margin-top:30px;
+}
+.foot-in{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.foot-x{
+  font-family:var(--mono);font-size:12px;color:var(--violet);
+  text-decoration:none;letter-spacing:.06em;
+}
+.foot-x:hover{color:var(--cyan)}
+.disclaimer{
+  font-family:var(--mono);font-size:10.5px;color:var(--muted-dim);
+  line-height:1.85;max-width:640px;margin-top:26px;
+}
+
+@media(max-width:820px){
+  .headline{grid-template-columns:1fr}
+  .tape-head,.tape-row{grid-template-columns:36px 78px 54px 56px 92px 70px 76px 88px;font-size:11px;gap:10px;min-width:640px}
+  .d-head,.d-row{grid-template-columns:1fr 62px 62px 88px 96px;font-size:11px;gap:8px;min-width:520px}
+  .daily{overflow-x:auto}
+  .hero{padding:52px 0 36px}
+  section{padding:50px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="live.html">October<span>&nbsp;Fund</span></a>
+    <div class="nav-links">
+      <a href="live.html" class="on">Live Record</a>
+      <a href="index.html">Development Record</a>
+      <a href="https://x.com/OctoberFund" target="_blank" rel="noopener">@OctoberFund</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="live-badge"><span class="pulse"></span> Live capital · Interactive Brokers</div>
+    <div class="day-line">
+      <div class="day-counter" id="dayCounter">Day 001</div>
+      <div class="day-since" id="daySince"></div>
+    </div>
+    <h1>Every trade.<br><em>Unedited.</em></h1>
+    <p class="hero-sub">
+      This page is the complete record of a live futures account, posted trade by trade
+      with entry, exit, timestamp, and net result after commission. Nothing is filtered
+      and nothing is removed. It updates the same day I trade.
+    </p>
+
+    <div class="headline">
+      <div class="hl">
+        <div class="hl-label">Net P&amp;L</div>
+        <div class="hl-val" id="hNet">—</div>
+        <div class="hl-note" id="hNetSub">after commissions</div>
+      </div>
+      <div class="hl">
+        <div class="hl-label">Account equity</div>
+        <div class="hl-val neutral" id="hEq">—</div>
+        <div class="hl-note" id="hEqSub"></div>
+      </div>
+      <div class="hl">
+        <div class="hl-label">Return</div>
+        <div class="hl-val" id="hRet">—</div>
+        <div class="hl-note" id="hRetSub"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <section id="stats">
+    <div class="sec-head">
+      <div class="eyebrow">Performance</div>
+      <h2>The numbers, computed from the tape</h2>
+      <p class="sec-note">Every figure below is derived directly from the trade list — nothing is entered by hand, so nothing can drift out of sync.</p>
+    </div>
+    <div class="stats" id="statGrid"></div>
+  </section>
+
+  <!-- CURVE -->
+  <section id="curve-sec">
+    <div class="sec-head">
+      <div class="eyebrow">Equity</div>
+      <h2>Account value, trade by trade</h2>
+    </div>
+    <div class="curve-box">
+      <div class="curve-top">
+        <div class="curve-title">Cumulative equity · net of fees</div>
+        <div class="curve-ret" id="curveRet">—</div>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="curve"></canvas>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAPE -->
+  <section id="tape-sec">
+    <div class="sec-head">
+      <div class="eyebrow">The tape</div>
+      <h2>Complete trade ledger</h2>
+      <p class="sec-note">Ordered oldest to newest. The running column is account equity after that trade closed.</p>
+    </div>
+    <div class="tape-scroll">
+      <div class="tape">
+        <div class="tape-head">
+          <div>#</div><div>Date</div><div>Sym</div><div>Side</div>
+          <div>Entry → Exit</div><div class="t-pts">Points</div>
+          <div class="t-hold">Hold</div><div class="t-net">Net</div>
+        </div>
+        <div id="tapeBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAILY -->
+  <section id="daily-sec">
+    <div class="sec-head">
+      <div class="eyebrow">By session</div>
+      <h2>Daily results</h2>
+      <p class="sec-note">Grouped by CME trading session, not calendar date — a session opens the evening before and runs through the next afternoon. Trades marked <span class="t-moon">◗</span> were taken in the overnight Globex window.</p>
+    </div>
+    <div class="daily">
+      <div class="d-head">
+        <div>Session</div><div class="d-num">Trades</div><div class="d-num">W/L</div>
+        <div class="d-net">Net</div><div class="d-eq">Equity</div>
+      </div>
+      <div id="dailyBody"></div>
+    </div>
+  </section>
+
+  <!-- STANDING NOTE -->
+  <section id="note-sec">
+    <div class="note">
+      <div class="note-label">Standing note</div>
+      <p id="sampleNote"></p>
+      <p>
+        <strong>Red days get posted with the same detail as green ones.</strong>
+        A track record that only shows winners isn't a track record — it's marketing.
+        If a session is bad, it appears here, on the day it happens, at full resolution.
+      </p>
+      <p>
+        The <a href="index.html" style="color:var(--violet)">development record</a> covers
+        December 2025 through August 2026 and was traded in simulation. It is kept separate
+        from this page on purpose, and its results should not be read as live performance.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="shell">
+    <div class="foot-in">
+      <div>
+        <div class="brand" style="margin-bottom:9px">October<span>&nbsp;Fund</span></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted-dim)">
+          Discretionary intraday macro fader · Dallas, TX
+        </div>
+      </div>
+      <a class="foot-x" href="https://x.com/OctoberFund" target="_blank" rel="noopener">@OctoberFund →</a>
+    </div>
+    <p class="disclaimer">
+      Results shown are from a live individual futures account at Interactive Brokers and are net of
+      commissions and exchange fees. Trading futures involves substantial risk of loss and is not
+      suitable for every investor. Past performance is not indicative of future results. Nothing on
+      this page is investment advice, a solicitation, or an offer to manage capital.
+      <span id="updated"></span>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   EDIT ONLY THIS BLOCK.
+   Add one line per trade. Everything else on the page recalculates.
+   side: 'Short' or 'Long'   ·   times are 24h HH:MM:SS
+   ═══════════════════════════════════════════════════════════════ */
+
+var CONFIG = {
+  startEquity : 6000,        // funding amount
+  startDate   : '2026-08-25',// first day of live trading
+  commPerSide : 0.61,        // commission per contract per side
+  sessionRoll : 17           // CME session rolls to next day at this hour (broker local time)
+};
+
+var TRADES = [
+  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29324.25, exit:29336.50, tIn:'08:06:35', tOut:'08:26:01' },
+  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29312.75, exit:29268.50, tIn:'08:30:17', tOut:'09:06:42' },
+  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29284.25, exit:29267.00, tIn:'11:18:19', tOut:'11:43:36' },
+  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29240.00, exit:29219.75, tIn:'22:38:00', tOut:'23:49:00' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29233.75, exit:29205.25, tIn:'08:31:00', tOut:'09:22:00' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29256.00, exit:29249.50, tIn:'09:56:00', tOut:'09:56:00' }
+];
+
+/* Contract point values — add any instrument you trade */
+var MULT = {
+  MNQ:2,  MES:5,  MYM:0.5, M2K:5,  MGC:10, MCL:100, MBT:0.1,
+  NQ:20,  ES:50,  YM:5,    RTY:50, GC:100, CL:1000, SI:5000
+};
+
+/* ═══════════ nothing below needs editing ═══════════ */
+
+var $ = function(id){ return document.getElementById(id); };
+var money = function(n,dec){
+  dec = dec===undefined?2:dec;
+  return '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+};
+var signed = function(n,dec){ return (n<0?'-':'+')+money(n,dec); };
+var cls = function(n){ return n>0?'up':(n<0?'down':'neutral'); };
+
+/* ---- compute each trade ---- */
+function holdSecs(t){
+  var a = new Date(t.d+'T'+t.tIn), b = new Date(t.d+'T'+t.tOut);
+  if(b < a) b = new Date(b.getTime() + 864e5);   // trade crossed midnight
+  var s = (b-a)/1000;
+  return s>0 ? s : 0;
+}
+function fmtHold(s){
+  if(s===null||s===undefined) return '—';
+  if(s<60) return '<1m';
+  var h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = Math.round(s%60);
+  if(h) return h+'h '+String(m).padStart(2,'0')+'m';
+  return m+'m '+String(sec).padStart(2,'0')+'s';
+}
+/* Futures sessions open the evening before. A fill at 22:38 on Aug 25
+   belongs to the Aug 26 session, so group by session, not calendar date. */
+function sessionOf(t){
+  var p = t.d.split('-');
+  var d = new Date(+p[0], +p[1]-1, +p[2]);
+  var h = parseInt(t.tIn.slice(0,2),10);
+  if(h >= CONFIG.sessionRoll) d.setDate(d.getDate()+1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isOvernight(t){
+  var h = parseInt(t.tIn.slice(0,2),10);
+  return h >= CONFIG.sessionRoll || h < 7;
+}
+var T = TRADES.map(function(t,i){
+  var m = MULT[t.sym] || 1;
+  var pts = (t.side==='Short') ? (t.entry - t.exit) : (t.exit - t.entry);
+  var gross = pts * m * t.qty;
+  var comm = CONFIG.commPerSide * 2 * t.qty;
+  return Object.assign({}, t, {
+    i:i+1, mult:m, pts:pts, gross:gross, comm:comm,
+    net: gross - comm, hold: holdSecs(t),
+    sess: sessionOf(t), night: isOvernight(t)
+  });
+});
+
+/* ---- aggregate ---- */
+var netTotal = T.reduce(function(a,t){return a+t.net;},0);
+var equity   = CONFIG.startEquity + netTotal;
+var retPct   = CONFIG.startEquity ? (netTotal/CONFIG.startEquity*100) : 0;
+var wins     = T.filter(function(t){return t.net>0;});
+var losses   = T.filter(function(t){return t.net<0;});
+var winRate  = T.length ? wins.length/T.length*100 : 0;
+var gProfit  = wins.reduce(function(a,t){return a+t.net;},0);
+var gLoss    = Math.abs(losses.reduce(function(a,t){return a+t.net;},0));
+var pf       = gLoss>0 ? gProfit/gLoss : (gProfit>0?Infinity:0);
+var expect   = T.length ? netTotal/T.length : 0;
+var avgWin   = wins.length ? gProfit/wins.length : 0;
+var avgLoss  = losses.length ? gLoss/losses.length : 0;
+var rr       = avgLoss>0 ? avgWin/avgLoss : (avgWin>0?Infinity:0);
+var totComm  = T.reduce(function(a,t){return a+t.comm;},0);
+var avgHold  = T.length ? T.reduce(function(a,t){return a+t.hold;},0)/T.length : 0;
+
+/* equity path + max drawdown */
+var path=[{eq:CONFIG.startEquity,label:'Funded',date:CONFIG.startDate}], run=CONFIG.startEquity, peak=CONFIG.startEquity, maxDD=0, maxDDpct=0;
+T.forEach(function(t){
+  run += t.net;
+  if(run>peak) peak=run;
+  var dd = peak-run;
+  if(dd>maxDD){ maxDD=dd; maxDDpct = peak? dd/peak*100 : 0; }
+  path.push({eq:run,label:'#'+t.i,date:t.d,net:t.net,trade:t});
+});
+
+/* daily rollup */
+var byDay={}, order=[];
+T.forEach(function(t){
+  if(!byDay[t.sess]){ byDay[t.sess]={d:t.sess,n:0,w:0,l:0,net:0,night:0}; order.push(t.sess); }
+  var g=byDay[t.sess]; g.n++; g.net+=t.net;
+  if(t.night) g.night++;
+  if(t.net>0) g.w++; else if(t.net<0) g.l++;
+});
+order.sort();
+var days = order.map(function(d){return byDay[d];});
+var dRun = CONFIG.startEquity;
+days.forEach(function(g){ dRun+=g.net; g.eq=dRun; });
+var bestDay  = days.length ? Math.max.apply(null,days.map(function(g){return g.net;})) : 0;
+var worstDay = days.length ? Math.min.apply(null,days.map(function(g){return g.net;})) : 0;
+
+/* ---- render hero ---- */
+$('dayCounter').textContent = 'Day '+String(days.length).padStart(3,'0');
+$('daySince').textContent = 'Live since '+new Date(CONFIG.startDate+'T12:00:00')
+  .toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+$('hNet').textContent = signed(netTotal);
+$('hNet').className = 'hl-val '+cls(netTotal);
+$('hNetSub').textContent = money(totComm)+' paid in commissions';
+
+$('hEq').textContent = money(equity);
+$('hEqSub').textContent = 'funded at '+money(CONFIG.startEquity,0);
+
+$('hRet').textContent = (retPct>=0?'+':'')+retPct.toFixed(2)+'%';
+$('hRet').className = 'hl-val '+cls(retPct);
+$('hRetSub').textContent = days.length+(days.length===1?' session':' sessions')+' traded';
+
+$('curveRet').textContent = (retPct>=0?'+':'')+retPct.toFixed(2)+'%';
+$('curveRet').className = 'curve-ret '+cls(retPct);
+
+/* ---- render stats ---- */
+var pfTxt = (pf===Infinity) ? '∞' : pf.toFixed(2);
+var rrTxt = (rr===Infinity) ? '∞' : rr.toFixed(2)+' : 1';
+var stats = [
+  ['Trades',        String(T.length),               wins.length+'W / '+losses.length+'L'],
+  ['Win rate',      winRate.toFixed(1)+'%',         'across '+days.length+' session'+(days.length===1?'':'s')],
+  ['Profit factor', pfTxt,                          money(gProfit)+' / '+money(gLoss)],
+  ['Expectancy',    signed(expect),                 'per trade'],
+  ['Avg win : loss',rrTxt,                          money(avgWin)+' vs '+money(avgLoss)],
+  ['Max drawdown',  maxDD>0?'-'+money(maxDD):'$0.00', maxDD>0?maxDDpct.toFixed(2)+'% of peak':'no drawdown yet'],
+  ['Best session',  signed(bestDay),                days.length>1 ? 'worst '+signed(worstDay) : 'only session so far'],
+  ['Avg hold',      fmtHold(avgHold),               'time in market']
+];
+$('statGrid').innerHTML = stats.map(function(s){
+  return '<div class="stat"><div class="stat-label">'+s[0]+'</div>'+
+         '<div class="stat-val">'+s[1]+'</div>'+
+         '<div class="stat-sub">'+s[2]+'</div></div>';
+}).join('');
+
+/* ---- render tape ---- */
+$('tapeBody').innerHTML = T.map(function(t){
+  var w = t.net>0;
+  return '<div class="tape-row '+(w?'w':(t.net<0?'l':''))+'">'+
+    '<div class="t-idx">'+String(t.i).padStart(3,'0')+'</div>'+
+    '<div class="t-time">'+t.d.slice(5)+' <span style="color:var(--muted-dim)">'+t.tIn.slice(0,5)+'</span>'+
+      (t.night?'<span class="t-moon" title="Overnight Globex session">◗</span>':'')+'</div>'+
+    '<div class="t-sym">'+t.sym+'</div>'+
+    '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+'</div>'+
+    '<div class="t-px">'+t.entry.toFixed(2)+' → '+t.exit.toFixed(2)+'</div>'+
+    '<div class="t-pts '+cls(t.pts)+'">'+(t.pts>=0?'+':'')+t.pts.toFixed(2)+'</div>'+
+    '<div class="t-hold">'+fmtHold(t.hold)+'</div>'+
+    '<div class="t-net '+cls(t.net)+'">'+signed(t.net)+'</div>'+
+  '</div>';
+}).join('');
+
+/* ---- render daily ---- */
+$('dailyBody').innerHTML = days.map(function(g){
+  return '<div class="d-row">'+
+    '<div class="d-date">'+new Date(g.d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+
+      (g.night?' <span class="t-moon" title="includes overnight Globex trades">◗'+g.night+'</span>':'')+'</div>'+
+    '<div class="d-num">'+g.n+'</div>'+
+    '<div class="d-num">'+g.w+'/'+g.l+'</div>'+
+    '<div class="d-net '+cls(g.net)+'">'+signed(g.net)+'</div>'+
+    '<div class="d-eq">'+money(g.eq)+'</div>'+
+  '</div>';
+}).join('');
+
+/* ---- standing note ---- */
+var n = T.length;
+$('sampleNote').innerHTML = n < 100
+  ? '<strong>Sample size: '+n+' trade'+(n===1?'':'s')+' across '+days.length+' session'+(days.length===1?'':'s')+'.</strong> '+
+    'That is not enough to demonstrate an edge, and I am not going to pretend otherwise. '+
+    'These numbers are noise until the sample is several hundred trades deep. The page exists '+
+    'to build that sample in public, one honest session at a time.'
+  : '<strong>Sample size: '+n+' trades across '+days.length+' sessions.</strong> '+
+    'Large enough to start reading, small enough to stay humble about.';
+
+$('updated').textContent = ' Last updated '+
+  (days.length ? new Date(days[days.length-1].d+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—')+'.';
+
+/* ─────────── EQUITY CURVE ─────────── */
+(function(){
+  var cv=$('curve'), tip=$('tip'), ctx=cv.getContext('2d');
+  var pad={l:62,r:16,t:16,b:34}, pts=[];
+
+  function draw(){
+    var dpr=window.devicePixelRatio||1;
+    var W=cv.clientWidth, H=cv.clientHeight;
+    cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+
+    var vals=path.map(function(p){return p.eq;});
+    var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+    var span=(hi-lo)||Math.max(hi*0.01,50);
+    lo-=span*0.18; hi+=span*0.18;
+    var cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+    var X=function(i){ return pad.l + (path.length<2?cw/2:(i/(path.length-1))*cw); };
+    var Y=function(v){ return pad.t + ch - ((v-lo)/(hi-lo))*ch; };
+
+    /* grid + y labels */
+    ctx.font='10px "JetBrains Mono", monospace'; ctx.textAlign='right'; ctx.textBaseline='middle';
+    for(var k=0;k<=4;k++){
+      var v=lo+(hi-lo)*(k/4), y=Y(v);
+      ctx.strokeStyle='rgba(29,29,44,.65)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+      ctx.fillStyle='#4d4d61';
+      ctx.fillText('$'+Math.round(v).toLocaleString('en-US'), pad.l-10, y);
+    }
+
+    /* baseline at funding level */
+    var by=Y(CONFIG.startEquity);
+    if(by>pad.t && by<H-pad.b){
+      ctx.setLineDash([3,4]); ctx.strokeStyle='rgba(167,139,250,.35)';
+      ctx.beginPath(); ctx.moveTo(pad.l,by); ctx.lineTo(W-pad.r,by); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    pts = path.map(function(p,i){ return {x:X(i), y:Y(p.eq), p:p}; });
+
+    /* fill */
+    if(pts.length>1){
+      var g=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+      var end = netTotal>=0 ? '52,211,153' : '251,113,133';
+      g.addColorStop(0,'rgba('+end+',.16)');
+      g.addColorStop(1,'rgba('+end+',0)');
+      ctx.beginPath(); ctx.moveTo(pts[0].x,H-pad.b);
+      pts.forEach(function(pt){ ctx.lineTo(pt.x,pt.y); });
+      ctx.lineTo(pts[pts.length-1].x,H-pad.b); ctx.closePath();
+      ctx.fillStyle=g; ctx.fill();
+    }
+
+    /* line */
+    var lg=ctx.createLinearGradient(pad.l,0,W-pad.r,0);
+    lg.addColorStop(0,'#7c5cf0'); lg.addColorStop(.55,'#a78bfa');
+    lg.addColorStop(1, netTotal>=0?'#34d399':'#fb7185');
+    ctx.strokeStyle=lg; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.beginPath();
+    pts.forEach(function(pt,i){ i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y); });
+    ctx.stroke();
+
+    /* nodes */
+    pts.forEach(function(pt,i){
+      ctx.beginPath(); ctx.arc(pt.x,pt.y,i===pts.length-1?4:2.5,0,Math.PI*2);
+      ctx.fillStyle = i===0 ? '#7c5cf0' : (pt.p.net>=0?'#34d399':'#fb7185');
+      ctx.fill();
+      if(i===pts.length-1){
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,8,0,Math.PI*2);
+        ctx.fillStyle='rgba(52,211,153,.14)'; ctx.fill();
+      }
+    });
+
+    /* x labels: first + last */
+    ctx.textAlign='center'; ctx.textBaseline='top'; ctx.fillStyle='#4d4d61';
+    var fmt=function(d){ return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
+    ctx.fillText(fmt(path[0].date), pts[0].x, H-pad.b+11);
+    if(pts.length>1) ctx.fillText(fmt(path[path.length-1].date), pts[pts.length-1].x, H-pad.b+11);
+  }
+
+  function move(e){
+    if(!pts.length) return;
+    var r=cv.getBoundingClientRect();
+    var mx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    var best=pts[0], bd=1e9;
+    pts.forEach(function(pt){ var d=Math.abs(pt.x-mx); if(d<bd){bd=d;best=pt;} });
+    if(bd>60){ tip.style.opacity=0; return; }
+    var p=best.p;
+    var body = p.net===undefined
+      ? '<div class="tip-d">Account funded</div>'+money(p.eq)
+      : '<div class="tip-d">Trade '+p.label+' · '+new Date(p.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</div>'+
+        money(p.eq)+' <span style="color:'+(p.net>=0?'var(--green)':'var(--red)')+'">'+signed(p.net)+'</span>';
+    tip.innerHTML=body;
+    tip.style.opacity=1;
+    var tw=tip.offsetWidth;
+    tip.style.left=Math.max(4,Math.min(best.x-tw/2, r.width-tw-4))+'px';
+    tip.style.top=Math.max(4,best.y-tip.offsetHeight-14)+'px';
+  }
+  cv.addEventListener('mousemove',move);
+  cv.addEventListener('touchmove',function(e){move(e);},{passive:true});
+  cv.addEventListener('mouseleave',function(){tip.style.opacity=0;});
+  window.addEventListener('resize',draw);
+  draw();
+})();
+
+/* ─────────── STARFIELD ─────────── */
+(function(){
+  var c=$('stars'), x=c.getContext('2d'), stars=[], sparks=[], raf;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var COL=['rgba(255,255,255,','rgba(167,139,250,','rgba(34,211,238,','rgba(52,211,153,'];
+  function init(){
+    c.width=innerWidth; c.height=innerHeight;
+    var n=Math.min(150,Math.floor(innerWidth*innerHeight/13000));
+    stars=[]; sparks=[];
+    for(var i=0;i<n;i++) stars.push({
+      x:Math.random()*c.width, y:Math.random()*c.height,
+      r:Math.random()*1.1+.25, a:Math.random()*.55+.12,
+      tw:Math.random()*.014+.003, dir:Math.random()>.5?1:-1,
+      col:COL[Math.random()<.72?0:1+Math.floor(Math.random()*3)]
+    });
+    for(var j=0;j<9;j++) sparks.push({
+      x:Math.random()*c.width, y:Math.random()*c.height,
+      s:Math.random()*7+4, a:Math.random()*.4+.1,
+      tw:Math.random()*.009+.002, dir:Math.random()>.5?1:-1,
+      col:Math.random()>.5?'167,139,250':'34,211,238'
+    });
+  }
+  function sparkle(o){
+    x.save(); x.translate(o.x,o.y);
+    var g=x.createLinearGradient(-o.s,0,o.s,0);
+    g.addColorStop(0,'rgba('+o.col+',0)');
+    g.addColorStop(.5,'rgba('+o.col+','+o.a+')');
+    g.addColorStop(1,'rgba('+o.col+',0)');
+    x.fillStyle=g;
+    x.beginPath();
+    x.moveTo(0,-o.s); x.quadraticCurveTo(o.s*.16,-o.s*.16,o.s,0);
+    x.quadraticCurveTo(o.s*.16,o.s*.16,0,o.s);
+    x.quadraticCurveTo(-o.s*.16,o.s*.16,-o.s,0);
+    x.quadraticCurveTo(-o.s*.16,-o.s*.16,0,-o.s);
+    x.fill(); x.restore();
+  }
+  function frame(){
+    x.clearRect(0,0,c.width,c.height);
+    stars.forEach(function(s){
+      if(!reduce){ s.a+=s.tw*s.dir; if(s.a>.72||s.a<.1) s.dir*=-1; }
+      x.beginPath(); x.arc(s.x,s.y,s.r,0,Math.PI*2);
+      x.fillStyle=s.col+s.a+')'; x.fill();
+    });
+    sparks.forEach(function(o){
+      if(!reduce){ o.a+=o.tw*o.dir; if(o.a>.5||o.a<.06) o.dir*=-1; }
+      sparkle(o);
+    });
+    if(!reduce) raf=requestAnimationFrame(frame);
+  }
+  init(); frame();
+  addEventListener('resize',function(){ cancelAnimationFrame(raf); init(); frame(); });
+})();
+</script>
+</body>
+</html>
