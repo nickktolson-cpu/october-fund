@@ -107,6 +107,26 @@
     width: 6px; height: 6px;
     background: var(--green); border-radius: 50%;
     animation: pulse-dot 2s ease-in-out infinite;
+  }   .nav-right {
+    display: flex; align-items: center; gap: 22px;
+  }
+
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green);
+    text-decoration: none;
+    padding: 5px 11px;
+    border: 1px solid rgba(52, 211, 153, 0.28);
+    border-radius: 2px;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-link:hover, .nav-link:focus-visible {
+    background: rgba(52, 211, 153, 0.09);
+    border-color: rgba(52, 211, 153, 0.55);
   }
 
   @keyframes pulse-dot {
@@ -564,11 +584,14 @@
 
 <div class="page-wrapper">
 
-  <nav>
+    <nav>
     <div class="nav-brand">October <span>Fund</span></div>
-    <div class="nav-status">
-      <div class="status-dot"></div>
-      DALLAS, TX
+    <div class="nav-right">
+      <a class="nav-link" href="live.html">Live Record</a>
+      <div class="nav-status">
+        <div class="status-dot"></div>
+        DALLAS, TX
+      </div>
     </div>
   </nav>
 
