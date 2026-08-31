@@ -206,22 +206,54 @@ h2{
 .tape-scroll::-webkit-scrollbar{height:6px}
 .tape-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 
-/* ---------- DAILY ---------- */
-.daily{border:1px solid var(--line);border-radius:3px;overflow:hidden}
-.d-head,.d-row{
-  display:grid;grid-template-columns:1fr 82px 82px 100px 110px;
-  gap:12px;padding:14px 18px;font-family:var(--mono);font-size:12px;align-items:center;
+/* ---------- CALENDAR ---------- */
+.cal-month{margin-bottom:30px}
+.cal-month-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.cal-month-label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.cal-month-net{font-family:var(--mono);font-size:13px;font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.cal-head{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted-dim);text-align:center;padding-bottom:2px}
+.cal-cell{
+  min-height:76px;background:var(--panel);border:1px solid var(--line-soft);
+  border-radius:2px;padding:8px 9px;display:flex;flex-direction:column;justify-content:space-between;
 }
-.d-head{
-  background:var(--panel-2);border-bottom:1px solid var(--line);
-  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-dim);
+.cal-cell.empty{background:transparent;border-color:transparent}
+.cal-cell.has{cursor:pointer;transition:border-color .18s,background .18s}
+.cal-cell.has.w{border-color:rgba(52,211,153,.28)}
+.cal-cell.has.l{border-color:rgba(251,113,133,.28)}
+.cal-cell.has:hover{background:var(--panel-2)}
+.cal-cell.sel{background:var(--panel-2);border-color:var(--violet)}
+.cal-day{font-family:var(--mono);font-size:10px;color:var(--muted-dim)}
+.cal-net{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:-.02em}
+.cal-n{font-family:var(--mono);font-size:9px;color:var(--muted-dim)}
+
+/* ---------- DAY DETAIL ---------- */
+.day-detail{border:1px solid var(--line);border-radius:3px;background:var(--panel);margin-top:20px;overflow:hidden}
+.dd-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  padding:18px 20px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.dd-date{font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.01em}
+.dd-meta{font-family:var(--mono);font-size:11px;color:var(--muted-dim);margin-top:5px}
+.dd-net{font-family:var(--mono);font-size:19px;font-weight:700}
+.dd-note{padding:16px 20px;border-bottom:1px solid var(--line-soft);
+  font-size:14px;line-height:1.7;color:var(--muted);background:var(--panel-2)}
+.dd-rows{padding:4px 0}
+.dd-head{display:grid;grid-template-columns:62px 1fr 76px 84px 92px;gap:12px;align-items:center;
+  padding:10px 20px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted-dim);
+  background:var(--panel-2);border-bottom:1px solid var(--line-soft)}
+.dd-row{display:grid;grid-template-columns:62px 1fr 76px 84px 92px;gap:12px;align-items:center;
+  padding:11px 20px;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--line-soft)}
+.dd-row:last-child{border-bottom:none}
+
+/* ---------- LEDGER TOGGLE ---------- */
+.ledger-toggle{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);background:var(--panel);border:1px solid var(--line);
+  border-radius:2px;padding:11px 18px;cursor:pointer;transition:color .2s,border-color .2s;
 }
-.d-row{background:var(--panel);border-bottom:1px solid var(--line-soft)}
-.d-row:last-child{border-bottom:none}
-.d-date{color:var(--text)}
-.d-num{text-align:right;color:var(--muted)}
-.d-net{text-align:right;font-weight:700}
-.d-eq{text-align:right;color:var(--muted)}
+.ledger-toggle:hover{color:var(--text);border-color:var(--violet)}
+#ledgerWrap{margin-top:16px}
 
 /* ---------- STANDING NOTE ---------- */
 .note{
@@ -254,8 +286,15 @@ footer{
 @media(max-width:820px){
   .headline{grid-template-columns:1fr}
   .tape-head,.tape-row{grid-template-columns:36px 78px 54px 56px 92px 70px 76px 88px;font-size:11px;gap:10px;min-width:640px}
-  .d-head,.d-row{grid-template-columns:1fr 62px 62px 88px 96px;font-size:11px;gap:8px;min-width:520px}
-  .daily{overflow-x:auto}
+  .cal-grid{gap:4px}
+  .cal-cell{min-height:64px;padding:6px}
+  .cal-net{font-size:10.5px}
+  .cal-n{font-size:8px}
+  .cal-day{font-size:9px}
+  .dd-row,.dd-head{grid-template-columns:52px 1fr 62px 68px 78px;gap:8px;font-size:11px;padding:10px 14px}
+  .dd-head{font-size:8.5px}
+  .dd-top{padding:16px 14px}
+  .dd-note{padding:14px}
   .hero{padding:52px 0 36px}
   section{padding:50px 0}
 }
@@ -343,14 +382,26 @@ footer{
     </div>
   </section>
 
+  <!-- CALENDAR -->
+  <section id="cal-sec">
+    <div class="sec-head">
+      <div class="eyebrow">Sessions</div>
+      <h2>Trading calendar</h2>
+      <p class="sec-note">Each cell is one CME trading session, net of commissions — sessions open the evening before and run through the next afternoon. Select a day to see every trade in it. Sessions marked <span class="t-moon">◗</span> include overnight Globex trades.</p>
+    </div>
+    <div id="calMonths"></div>
+    <div class="day-detail" id="dayDetail"></div>
+  </section>
+
   <!-- TAPE -->
   <section id="tape-sec">
     <div class="sec-head">
       <div class="eyebrow">The tape</div>
       <h2>Complete trade ledger</h2>
-      <p class="sec-note">Ordered oldest to newest. The running column is account equity after that trade closed.</p>
+      <p class="sec-note">Every trade taken in this account, oldest to newest, with entry, exit, hold time and net result. Nothing is filtered out.</p>
     </div>
-    <div class="tape-scroll">
+    <button class="ledger-toggle" id="ledgerToggle">Show full ledger</button>
+    <div class="tape-scroll" id="ledgerWrap" hidden>
       <div class="tape">
         <div class="tape-head">
           <div>#</div><div>Date</div><div>Sym</div><div>Side</div>
@@ -359,22 +410,6 @@ footer{
         </div>
         <div id="tapeBody"></div>
       </div>
-    </div>
-  </section>
-
-  <!-- DAILY -->
-  <section id="daily-sec">
-    <div class="sec-head">
-      <div class="eyebrow">By session</div>
-      <h2>Daily results</h2>
-      <p class="sec-note">Grouped by CME trading session, not calendar date — a session opens the evening before and runs through the next afternoon. Trades marked <span class="t-moon">◗</span> were taken in the overnight Globex window.</p>
-    </div>
-    <div class="daily">
-      <div class="d-head">
-        <div>Session</div><div class="d-num">Trades</div><div class="d-num">W/L</div>
-        <div class="d-net">Net</div><div class="d-eq">Equity</div>
-      </div>
-      <div id="dailyBody"></div>
     </div>
   </section>
 
@@ -424,6 +459,9 @@ footer{
    EDIT ONLY THIS BLOCK.
    Add one line per trade. Everything else on the page recalculates.
    side: 'Short' or 'Long'   ·   times are 24h HH:MM:SS
+
+   TIMES ARE CENTRAL (exchange time). IBKR currently exports in
+   Pacific — add 2 hours to any raw fill time before pasting it here.
    ═══════════════════════════════════════════════════════════════ */
 
 var CONFIG = {
@@ -437,15 +475,44 @@ var TRADES = [
   { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29324.25, exit:29336.50, tIn:'08:06:35', tOut:'08:26:01' },
   { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29312.75, exit:29268.50, tIn:'08:30:17', tOut:'09:06:42' },
   { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29284.25, exit:29267.00, tIn:'11:18:19', tOut:'11:43:36' },
-  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29240.00, exit:29219.75, tIn:'22:38:00', tOut:'23:49:00' },
-  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29233.75, exit:29205.25, tIn:'08:31:00', tOut:'09:22:00' },
-  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29256.00, exit:29249.50, tIn:'09:56:00', tOut:'09:56:00' }
+  { d:'2026-08-25', sym:'MNQ', side:'Short', qty:1, entry:29240.00, exit:29219.75, tIn:'22:38:44', tOut:'23:49:30' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29233.75, exit:29205.25, tIn:'08:31:31', tOut:'09:22:17' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29256.00, exit:29249.50, tIn:'09:56:08', tOut:'09:56:58' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29280.50, exit:29272.75, tIn:'13:23:58', tOut:'13:25:12' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29293.00, exit:29283.25, tIn:'13:40:02', tOut:'14:59:35' },
+  { d:'2026-08-26', sym:'MNQ', side:'Short', qty:1, entry:29559.50, exit:29536.00, tIn:'17:12:00', tOut:'19:34:57' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29570.75, exit:29542.75, tIn:'08:44:23', tOut:'08:47:13' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29535.75, exit:29512.50, tIn:'09:06:30', tOut:'09:06:59' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29606.50, exit:29591.00, tIn:'10:00:55', tOut:'10:03:50' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29654.00, exit:29639.25, tIn:'11:45:33', tOut:'12:39:04' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29651.25, exit:29648.75, tIn:'15:16:47', tOut:'15:20:19' },
+  { d:'2026-08-27', sym:'MNQ', side:'Short', qty:1, entry:29691.75, exit:29652.25, tIn:'21:12:21', tOut:'21:42:58' },
+  { d:'2026-08-28', sym:'MNQ', side:'Short', qty:1, entry:29644.50, exit:29633.75, tIn:'07:42:14', tOut:'08:25:21' },
+  { d:'2026-08-28', sym:'MNQ', side:'Short', qty:1, entry:29685.75, exit:29674.50, tIn:'09:34:18', tOut:'10:41:18' },
+  { d:'2026-08-28', sym:'MNQ', side:'Long',  qty:1, entry:29556.25, exit:29538.50, tIn:'11:14:55', tOut:'11:15:57' },
+  { d:'2026-08-28', sym:'MNQ', side:'Long',  qty:1, entry:29528.75, exit:29450.00, tIn:'11:16:11', tOut:'13:50:29' },
+  { d:'2026-08-28', sym:'MNQ', side:'Long',  qty:1, entry:29446.00, exit:29496.75, tIn:'13:51:00', tOut:'15:38:19' },
+  { d:'2026-08-30', sym:'MNQ', side:'Long',  qty:1, entry:29288.75, exit:29315.75, tIn:'21:41:59', tOut:'21:46:20' },
+  { d:'2026-08-30', sym:'MNQ', side:'Short', qty:1, entry:29355.00, exit:29351.25, tIn:'22:08:52', tOut:'22:19:39' },
+  { d:'2026-08-31', sym:'MNQ', side:'Short', qty:1, entry:29447.00, exit:29443.00, tIn:'00:16:01', tOut:'05:02:57' },
+  { d:'2026-08-31', sym:'MNQ', side:'Short', qty:1, entry:29466.00, exit:29449.50, tIn:'07:18:31', tOut:'07:22:07' },
+  { d:'2026-08-31', sym:'MNQ', side:'Short', qty:1, entry:29510.25, exit:29472.75, tIn:'08:32:00', tOut:'08:32:58' }
 ];
 
 /* Contract point values — add any instrument you trade */
 var MULT = {
   MNQ:2,  MES:5,  MYM:0.5, M2K:5,  MGC:10, MCL:100, MBT:0.1,
   NQ:20,  ES:50,  YM:5,    RTY:50, GC:100, CL:1000, SI:5000
+};
+
+/* Session notes — keyed by session date. Optional; omit a date to show no note.
+   Write these the day you trade, before you know how the week ends. */
+var NOTES = {
+  '2026-08-25': 'First live session. Three shorts into a soft tape. Cut the only loser at 12 points and let the second run 44 — right shape, meaningless sample.',
+  '2026-08-26': 'Five shorts, five winners, one of them in the overnight window. Two were sub-90-second scalps where commission took 8–9% of the gross. Green day, but those two were filler.',
+  '2026-08-27': 'Best session so far. Six shorts into a market that kept rallying, and every fade paid. The last one was 2.5 points and gave 24% of it back in commission — that trade should not have been taken.',
+  '2026-08-28': 'First longs, and they found a hole in my process. Bought at 29,556, cut it in 62 seconds, bought again a minute later and held that one 2h34m while it went 78 points against me. On the short side I cut losers in about 19 minutes. I have a stop discipline in one direction and not the other. The third attempt worked, but the day still only closed +$24.18.',
+  '2026-08-31': 'Sunday night into Monday. Five green trades, sloppy process — two were 4-point scrapes where commission took over 15%, and one sat 4h46m overnight for $6.78. Profitable session, bad decisions inside it.'
 };
 
 /* ═══════════ nothing below needs editing ═══════════ */
@@ -513,6 +580,15 @@ var avgLoss  = losses.length ? gLoss/losses.length : 0;
 var rr       = avgLoss>0 ? avgWin/avgLoss : (avgWin>0?Infinity:0);
 var totComm  = T.reduce(function(a,t){return a+t.comm;},0);
 var avgHold  = T.length ? T.reduce(function(a,t){return a+t.hold;},0)/T.length : 0;
+var nShort   = T.filter(function(t){return t.side==='Short';}).length;
+var nLong    = T.length - nShort;
+var netShort = T.reduce(function(a,t){return a+(t.side==='Short'?t.net:0);},0);
+var netLong  = T.reduce(function(a,t){return a+(t.side==='Long' ?t.net:0);},0);
+var dirSide  = nShort>=nLong ? 'short' : 'long';
+var dirPct   = T.length ? Math.max(nShort,nLong)/T.length*100 : 0;
+var dirSub   = (nShort? nShort+'S '+signed(netShort) : '')+
+               (nShort&&nLong? ' · ' : '')+
+               (nLong ? nLong+'L '+signed(netLong) : '');
 
 /* equity path + max drawdown */
 var path=[{eq:CONFIG.startEquity,label:'Funded',date:CONFIG.startDate}], run=CONFIG.startEquity, peak=CONFIG.startEquity, maxDD=0, maxDDpct=0;
@@ -569,6 +645,7 @@ var stats = [
   ['Avg win : loss',rrTxt,                          money(avgWin)+' vs '+money(avgLoss)],
   ['Max drawdown',  maxDD>0?'-'+money(maxDD):'$0.00', maxDD>0?maxDDpct.toFixed(2)+'% of peak':'no drawdown yet'],
   ['Best session',  signed(bestDay),                days.length>1 ? 'worst '+signed(worstDay) : 'only session so far'],
+  ['Direction',     dirPct.toFixed(0)+'% '+dirSide, dirSub],
   ['Avg hold',      fmtHold(avgHold),               'time in market']
 ];
 $('statGrid').innerHTML = stats.map(function(s){
@@ -593,17 +670,98 @@ $('tapeBody').innerHTML = T.map(function(t){
   '</div>';
 }).join('');
 
-/* ---- render daily ---- */
-$('dailyBody').innerHTML = days.map(function(g){
-  return '<div class="d-row">'+
-    '<div class="d-date">'+new Date(g.d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+
-      (g.night?' <span class="t-moon" title="includes overnight Globex trades">◗'+g.night+'</span>':'')+'</div>'+
-    '<div class="d-num">'+g.n+'</div>'+
-    '<div class="d-num">'+g.w+'/'+g.l+'</div>'+
-    '<div class="d-net '+cls(g.net)+'">'+signed(g.net)+'</div>'+
-    '<div class="d-eq">'+money(g.eq)+'</div>'+
-  '</div>';
-}).join('');
+/* ---- calendar + day detail ---- */
+var sessMap={}, bySess={};
+days.forEach(function(g){ sessMap[g.d]=g; });
+T.forEach(function(t){ (bySess[t.sess]=bySess[t.sess]||[]).push(t); });
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function buildCal(){
+  var months=[];
+  days.forEach(function(g){ var k=g.d.slice(0,7); if(months.indexOf(k)<0) months.push(k); });
+  months.sort();
+  $('calMonths').innerHTML = months.map(function(ym){
+    var y=+ym.slice(0,4), m=+ym.slice(5,7)-1;
+    var last=new Date(y,m+1,0).getDate();
+    var rows=[],cur=[],prev=-1;
+    for(var d=1;d<=last;d++){
+      var wd=new Date(y,m,d).getDay();
+      if(wd===0||wd===6) continue;         // CME sessions land Mon–Fri
+      var col=wd-1;
+      if(col<=prev){ rows.push(cur); cur=[]; }
+      if(!cur.length){ for(var p=0;p<col;p++) cur.push(null); }
+      cur.push(d); prev=col;
+    }
+    if(cur.length){ while(cur.length<5) cur.push(null); rows.push(cur); }
+    var mNet=days.filter(function(g){return g.d.slice(0,7)===ym;})
+                 .reduce(function(a,g){return a+g.net;},0);
+    var cells=rows.map(function(r){
+      return r.map(function(d){
+        if(d===null) return '<div class="cal-cell empty"></div>';
+        var key=y+'-'+pad2(m+1)+'-'+pad2(d), g=sessMap[key];
+        if(!g) return '<div class="cal-cell"><div class="cal-day">'+d+'</div></div>';
+        return '<div class="cal-cell has '+(g.net>0?'w':(g.net<0?'l':''))+'" data-d="'+key+'" tabindex="0">'+
+          '<div class="cal-day">'+d+(g.night?'<span class="t-moon">◗</span>':'')+'</div>'+
+          '<div class="cal-net '+cls(g.net)+'">'+(g.net>=0?'+':'−')+Math.abs(g.net).toFixed(2)+'</div>'+
+          '<div class="cal-n">'+g.n+(g.n===1?' trade':' trades')+'</div>'+
+        '</div>';
+      }).join('');
+    }).join('');
+    return '<div class="cal-month">'+
+      '<div class="cal-month-top"><div class="cal-month-label">'+
+        new Date(y,m,1).toLocaleDateString('en-US',{month:'long',year:'numeric'})+
+      '</div><div class="cal-month-net '+cls(mNet)+'">'+signed(mNet)+'</div></div>'+
+      '<div class="cal-grid">'+
+        ['Mon','Tue','Wed','Thu','Fri'].map(function(x){return '<div class="cal-head">'+x+'</div>';}).join('')+
+        cells+
+      '</div></div>';
+  }).join('');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.cal-cell.has'),function(el){
+    var go=function(){ showDay(el.getAttribute('data-d')); };
+    el.addEventListener('click',go);
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+  });
+}
+
+function showDay(key){
+  var g=sessMap[key]; if(!g) return;
+  Array.prototype.forEach.call(document.querySelectorAll('.cal-cell'),function(e){ e.classList.remove('sel'); });
+  var sel=document.querySelector('.cal-cell[data-d="'+key+'"]');
+  if(sel) sel.classList.add('sel');
+  var list=bySess[key]||[], note=NOTES[key];
+  $('dayDetail').innerHTML=
+    '<div class="dd-top"><div>'+
+      '<div class="dd-date">'+new Date(key+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'</div>'+
+      '<div class="dd-meta">'+g.n+' trade'+(g.n===1?'':'s')+' · '+g.w+'W / '+g.l+'L · closed at '+money(g.eq)+'</div>'+
+    '</div><div class="dd-net '+cls(g.net)+'">'+signed(g.net)+'</div></div>'+
+    (note?'<div class="dd-note">'+note+'</div>':'')+
+    '<div class="dd-head"><div>Side</div><div>Entry → Exit</div>'+
+      '<div class="t-pts">Points</div><div class="t-hold">Hold</div><div class="t-net">Net P&amp;L</div></div>'+
+    '<div class="dd-rows">'+list.map(function(t){
+      return '<div class="dd-row">'+
+        '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+(t.night?'<span class="t-moon">◗</span>':'')+'</div>'+
+        '<div class="t-px">'+t.entry.toFixed(2)+' → '+t.exit.toFixed(2)+'</div>'+
+        '<div class="t-pts '+cls(t.pts)+'">'+(t.pts>=0?'+':'')+t.pts.toFixed(2)+'</div>'+
+        '<div class="t-hold">'+fmtHold(t.hold)+'</div>'+
+        '<div class="t-net '+cls(t.net)+'">'+signed(t.net)+'</div>'+
+      '</div>';
+    }).join('')+'</div>';
+}
+
+buildCal();
+if(days.length) showDay(days[days.length-1].d);
+
+/* ---- ledger toggle ---- */
+(function(){
+  var b=$('ledgerToggle'), w=$('ledgerWrap');
+  b.textContent='Show full ledger · '+T.length+' trades';
+  b.addEventListener('click',function(){
+    if(w.hasAttribute('hidden')){ w.removeAttribute('hidden'); b.textContent='Hide ledger'; }
+    else { w.setAttribute('hidden',''); b.textContent='Show full ledger · '+T.length+' trades'; }
+  });
+})();
 
 /* ---- standing note ---- */
 var n = T.length;
