@@ -446,7 +446,7 @@ footer{
     </div>
     <p class="disclaimer">
       Results shown are from a live individual futures account at Interactive Brokers and are net of
-      commissions and exchange fees. Trading futures involves substantial risk of loss and is not
+      commissions and exchange fees, and reflect trading P&L only — a small test withdrawal in September is not deducted. Trading futures involves substantial risk of loss and is not
       suitable for every investor. Past performance is not indicative of future results. Nothing on
       this page is investment advice, a solicitation, or an offer to manage capital.
       <span id="updated"></span>
@@ -513,7 +513,16 @@ var TRADES = [
   { d:'2026-09-02', sym:'MNQ', side:'Short', qty:1, entry:29096.50, exit:29087.75, tIn:'09:05:39', tOut:'09:06:28' },
   { d:'2026-09-02', sym:'MNQ', side:'Short', qty:1, entry:29157.50, exit:29111.75, tIn:'09:20:41', tOut:'09:59:35' },
   { d:'2026-09-02', sym:'MNQ', side:'Short', qty:1, entry:29227.75, exit:29217.75, tIn:'22:21:28', tOut:'23:41:17' },
-  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29197.75, exit:29189.75, tIn:'01:07:04', tOut:'01:07:46' }
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29197.75, exit:29189.75, tIn:'01:07:04', tOut:'01:07:46' },
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29197.75, exit:29156.50, tIn:'02:03:09', tOut:'04:49:30' },
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29211.25, exit:29330.50, tIn:'07:51:16', tOut:'08:40:00' },
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29329.50, exit:29287.25, tIn:'08:40:11', tOut:'09:44:36' },
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29312.75, exit:29287.25, tIn:'09:54:57', tOut:'09:56:21' },
+  { d:'2026-09-03', sym:'MNQ', side:'Short', qty:1, entry:29454.00, exit:29615.75, tIn:'10:11:20', tOut:'02:18:32' },
+  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29616.75, exit:29579.50, tIn:'02:19:26', tOut:'09:30:41' },
+  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29582.75, exit:29563.75, tIn:'09:40:18', tOut:'09:41:31' },
+  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29569.50, exit:29524.75, tIn:'11:34:32', tOut:'12:23:02' },
+  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29535.00, exit:29513.75, tIn:'13:56:48', tOut:'14:15:25' }
 ];
 
 /* Contract point values — add any instrument you trade */
@@ -532,7 +541,8 @@ var NOTES = {
   '2026-08-31': 'Sunday night into Monday. Six green trades, sloppy process — two were 4-point scrapes where commission took over 15%, and one sat 4h46m overnight for $6.78. I originally posted this session as five trades; the sixth was taken after I exported. Second time that has happened. Profitable session, bad decisions inside it.',
   '2026-09-01': 'Ten trades, three losses, and the first real test of the short-side stop. NQ fell about 470 points and I was short into all of it — but I got bounced three times on the way down, and cut every one inside sixteen minutes. That part worked. What didn\'t: capturing 82 gross points out of a 470-point move I had right all day, and trading from 1 AM to 9 PM to do it.',
   '2026-09-02': 'Four trades, four winners. One clean 46-point short, one 49-second scalp, one 75-second long for 6.75 points, and one held 80 minutes overnight for 10. The good trade made 72% of the session. The other three were activity.',
-  '2026-09-03': 'Session in progress.'
+  '2026-09-03': 'First red session, and the bill for two weeks of shorting into strength. NQ rallied roughly 465 points. I faded it five times. Three worked. Two did not: −119 points held 48 minutes, then −162 points held sixteen hours — through the close, through the reopen, through the night, until 2 AM. That single trade cost more than Days 1 and 2 earned together. Both times I re-shorted within a minute of covering, and both re-entries won. That is the dangerous part: the market is teaching me “you were right, just early,” and that lesson is how the next one gets held for a day.',
+  '2026-09-04': 'Four trades, four winners, +$239.62 — three-quarters of Thursday recovered inside one session. Which is exactly the problem. A green morning after a disaster erases the sting before the rule gets written. The first trade was a seven-hour overnight hold. Still no resting stops.'
 };
 
 /* ═══════════ nothing below needs editing ═══════════ */
@@ -645,7 +655,7 @@ $('hNet').className = 'hl-val '+cls(netTotal);
 $('hNetSub').textContent = money(totComm)+' paid in commissions';
 
 $('hEq').textContent = money(equity);
-$('hEqSub').textContent = 'funded at '+money(CONFIG.startEquity,0);
+$('hEqSub').textContent = 'funded at '+money(CONFIG.startEquity,0)+' · trading P&L only';
 
 $('hRet').textContent = (retPct>=0?'+':'')+retPct.toFixed(2)+'%';
 $('hRet').className = 'hl-val '+cls(retPct);
