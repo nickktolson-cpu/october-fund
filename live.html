@@ -522,7 +522,25 @@ var TRADES = [
   { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29616.75, exit:29579.50, tIn:'02:19:26', tOut:'09:30:41' },
   { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29582.75, exit:29563.75, tIn:'09:40:18', tOut:'09:41:31' },
   { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29569.50, exit:29524.75, tIn:'11:34:32', tOut:'12:23:02' },
-  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29535.00, exit:29513.75, tIn:'13:56:48', tOut:'14:15:25' }
+  { d:'2026-09-04', sym:'MNQ', side:'Short', qty:1, entry:29535.00, exit:29513.75, tIn:'13:56:48', tOut:'14:15:25' },
+  { d:'2026-09-06', sym:'MNQ', side:'Short', qty:1, entry:29582.75, exit:29554.25, tIn:'17:06:39', tOut:'18:23:51' },
+  { d:'2026-09-07', sym:'MNQ', side:'Short', qty:1, entry:29619.25, exit:29607.00, tIn:'08:25:34', tOut:'09:18:27' },
+  { d:'2026-09-07', sym:'MNQ', side:'Long', qty:1, entry:29549.00, exit:29552.75, tIn:'18:11:15', tOut:'18:35:55' },
+  { d:'2026-09-07', sym:'MNQ', side:'Short', qty:1, entry:29578.50, exit:29595.75, tIn:'18:42:32', tOut:'18:48:04' },
+  { d:'2026-09-07', sym:'MNQ', side:'Short', qty:1, entry:29587.50, exit:29750.00, tIn:'18:48:28', tOut:'23:26:19' },
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29664.50, exit:29554.00, tIn:'08:19:56', tOut:'10:06:50' },
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29610.00, exit:29584.00, tIn:'10:17:40', tOut:'10:22:17' },
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29603.25, exit:29593.50, tIn:'10:39:07', tOut:'11:09:47' },
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29598.00, exit:29577.75, tIn:'19:00:50', tOut:'20:49:49' },
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29631.00, exit:29576.25, tIn:'23:15:36', tOut:'00:00:03' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29389.50, tIn:'03:43:06', tOut:'03:49:15' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29391.50, exit:29380.00, tIn:'03:49:45', tOut:'03:53:10' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29425.75, tIn:'03:55:37', tOut:'04:11:33' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29497.50, exit:29539.75, tIn:'06:51:05', tOut:'06:56:29' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29540.50, exit:29527.25, tIn:'06:56:46', tOut:'07:29:00' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29535.50, exit:29508.75, tIn:'07:30:15', tOut:'07:32:09' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29517.25, exit:29508.00, tIn:'07:33:04', tOut:'07:33:29' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29480.00, exit:29461.25, tIn:'10:02:16', tOut:'10:03:39' }
 ];
 
 /* Contract point values — add any instrument you trade */
@@ -542,7 +560,10 @@ var NOTES = {
   '2026-09-01': 'Ten trades, three losses, and the first real test of the short-side stop. NQ fell about 470 points and I was short into all of it — but I got bounced three times on the way down, and cut every one inside sixteen minutes. That part worked. What didn\'t: capturing 82 gross points out of a 470-point move I had right all day, and trading from 1 AM to 9 PM to do it.',
   '2026-09-02': 'Four trades, four winners. One clean 46-point short, one 49-second scalp, one 75-second long for 6.75 points, and one held 80 minutes overnight for 10. The good trade made 72% of the session. The other three were activity.',
   '2026-09-03': 'First red session, and the bill for two weeks of shorting into strength. NQ rallied roughly 465 points. I faded it five times. Three worked. Two did not: −119 points held 48 minutes, then −162 points held sixteen hours — through the close, through the reopen, through the night, until 2 AM. That single trade cost more than Days 1 and 2 earned together. Both times I re-shorted within a minute of covering, and both re-entries won. That is the dangerous part: the market is teaching me “you were right, just early,” and that lesson is how the next one gets held for a day.',
-  '2026-09-04': 'Four trades, four winners, +$239.62 — three-quarters of Thursday recovered inside one session. Which is exactly the problem. A green morning after a disaster erases the sting before the rule gets written. The first trade was a seven-hour overnight hold. Still no resting stops.'
+  '2026-09-04': 'Four trades, four winners, +$239.62 — three-quarters of Thursday recovered inside one session. Which is exactly the problem. A green morning after a disaster erases the sting before the rule gets written. The first trade was a seven-hour overnight hold. Still no resting stops.',
+  '2026-09-07': 'Labor Day. Two shorts, two winners, +$79.06 — one at the Sunday Globex open, one in the thin holiday-morning session.',
+  '2026-09-08': 'Monday evening: cut a short in five minutes for −17, re-shorted 24 seconds later, held that one 4h38m for −162.50. Same trade as Sep 3, same size, three days after committing to bracket orders. Then Tuesday morning: +110 points on a single short, the best trade in the record. Fourth time a disaster has been followed by a big winner. That is why the lesson has not stuck.',
+  '2026-09-09': 'Ten trades, three losses — all three cut inside six minutes, the largest $85. Seven winners, +$208.80, new equity high. This is what the ledger looks like when the exits work. Still trading at 3:43 AM, still taking 25-second scalps, but nothing was held past the point where the stop should have been. First export taken after the close.'
 };
 
 /* ═══════════ nothing below needs editing ═══════════ */
