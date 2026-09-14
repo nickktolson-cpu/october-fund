@@ -459,6 +459,7 @@ footer{
    EDIT ONLY THIS BLOCK.
    Add one line per trade. Everything else on the page recalculates.
    side: 'Short' or 'Long'   ·   times are 24h HH:MM:SS
+   dOut: exit date — only needed when a trade is held more than one night
 
    TIMES ARE CENTRAL (exchange time). IBKR currently exports in
    Pacific — add 2 hours to any raw fill time before pasting it here.
@@ -531,16 +532,26 @@ var TRADES = [
   { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29664.50, exit:29554.00, tIn:'08:19:56', tOut:'10:06:50' },
   { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29610.00, exit:29584.00, tIn:'10:17:40', tOut:'10:22:17' },
   { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29603.25, exit:29593.50, tIn:'10:39:07', tOut:'11:09:47' },
-  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29598.00, exit:29577.75, tIn:'19:00:50', tOut:'20:49:49' },
-  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29631.00, exit:29576.25, tIn:'23:15:36', tOut:'00:00:03' },
-  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29389.50, tIn:'03:43:06', tOut:'03:49:15' },
-  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29391.50, exit:29380.00, tIn:'03:49:45', tOut:'03:53:10' },
-  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29425.75, tIn:'03:55:37', tOut:'04:11:33' },
-  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29497.50, exit:29539.75, tIn:'06:51:05', tOut:'06:56:29' },
-  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29540.50, exit:29527.25, tIn:'06:56:46', tOut:'07:29:00' },
-  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29535.50, exit:29508.75, tIn:'07:30:15', tOut:'07:32:09' },
-  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29517.25, exit:29508.00, tIn:'07:33:04', tOut:'07:33:29' },
-  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29480.00, exit:29461.25, tIn:'10:02:16', tOut:'10:03:39' }
+  { d:'2026-09-08', sym:'MNQ', side:'Short', qty:1, entry:29598.00, exit:29577.75, tIn:'21:00:50', tOut:'22:49:49' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29631.00, exit:29576.25, tIn:'01:15:36', tOut:'02:00:03' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29389.50, tIn:'05:43:06', tOut:'05:49:15' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29391.50, exit:29380.00, tIn:'05:49:45', tOut:'05:53:10' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29397.00, exit:29425.75, tIn:'05:55:37', tOut:'06:11:33' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29497.50, exit:29539.75, tIn:'08:51:05', tOut:'08:56:29' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29540.50, exit:29527.25, tIn:'08:56:46', tOut:'09:29:00' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29535.50, exit:29508.75, tIn:'09:30:15', tOut:'09:32:09' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29517.25, exit:29508.00, tIn:'09:33:04', tOut:'09:33:29' },
+  { d:'2026-09-09', sym:'MNQ', side:'Short', qty:1, entry:29480.00, exit:29461.25, tIn:'12:02:16', tOut:'12:03:39' },
+  { d:'2026-09-09', sym:'MNQ', side:'Long', qty:1, entry:29387.75, exit:29411.25, tIn:'20:21:21', tOut:'20:47:10' },
+  { d:'2026-09-10', sym:'MNQ', side:'Short', qty:1, entry:29454.00, exit:29441.50, tIn:'00:13:44', tOut:'01:20:11' },
+  { d:'2026-09-10', sym:'MNQ', side:'Long', qty:1, entry:29066.00, exit:29090.50, tIn:'08:24:05', tOut:'08:30:32' },
+  { d:'2026-09-10', sym:'MNQ', side:'Short', qty:1, entry:29238.00, exit:29227.25, tIn:'09:35:17', tOut:'10:03:34' },
+  { d:'2026-09-10', sym:'MNQ', side:'Short', qty:1, entry:29239.75, exit:29228.50, tIn:'10:05:16', tOut:'10:15:53' },
+  { d:'2026-09-10', sym:'MNQ', side:'Long', qty:1, entry:29111.75, exit:29127.75, tIn:'17:50:31', tOut:'19:08:40' },
+  { d:'2026-09-11', sym:'MNQ', side:'Short', qty:1, entry:29190.00, exit:29019.25, tIn:'00:44:30', dOut:'2026-09-13', tOut:'17:08:03' },
+  { d:'2026-09-14', sym:'MNQ', side:'Long', qty:1, entry:28843.25, exit:28859.75, tIn:'08:05:45', tOut:'08:13:06' },
+  { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29027.50, exit:29002.75, tIn:'08:49:12', tOut:'08:52:19' },
+  { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29017.75, exit:28997.75, tIn:'08:55:31', tOut:'08:55:50' }
 ];
 
 /* Contract point values — add any instrument you trade */
@@ -563,7 +574,10 @@ var NOTES = {
   '2026-09-04': 'Four trades, four winners, +$239.62 — three-quarters of Thursday recovered inside one session. Which is exactly the problem. A green morning after a disaster erases the sting before the rule gets written. The first trade was a seven-hour overnight hold. Still no resting stops.',
   '2026-09-07': 'Labor Day. Two shorts, two winners, +$79.06 — one at the Sunday Globex open, one in the thin holiday-morning session.',
   '2026-09-08': 'Monday evening: cut a short in five minutes for −17, re-shorted 24 seconds later, held that one 4h38m for −162.50. Same trade as Sep 3, same size, three days after committing to bracket orders. Then Tuesday morning: +110 points on a single short, the best trade in the record. Fourth time a disaster has been followed by a big winner. That is why the lesson has not stuck.',
-  '2026-09-09': 'Ten trades, three losses — all three cut inside six minutes, the largest $85. Seven winners, +$208.80, new equity high. This is what the ledger looks like when the exits work. Still trading at 3:43 AM, still taking 25-second scalps, but nothing was held past the point where the stop should have been. First export taken after the close.'
+  '2026-09-09': 'Ten trades, three losses — all three cut inside six minutes, the largest $85. Seven winners, +$208.80, new equity high. This is what the ledger looks like when the exits work. Still trading at 5:43 AM, still taking 25-second scalps, but nothing was held past the point where the stop should have been. First export taken after the close.',
+  '2026-09-10': 'Five trades, five winners, +$158.90. Two longs, both won — the long side is now positive overall. Holds between six minutes and an hour. Clean session.',
+  '2026-09-11': 'Two trades, both winners, +$371.06 — the best session in the record, and almost all of it is one trade. Short at 29,190 at 12:44 AM Friday, covered at 29,019 at 5:08 PM Sunday. Sixty-four hours. Through Friday, through the weekend, through the Sunday reopen. +$340 on one MNQ, a new best by a wide margin. That is a weekend hold on 10x leverage, and it worked. The 16-hour hold on Sep 3 lost $325. This one won $340. I know exactly what that pairing teaches, and I don\'t trust it.',
+  '2026-09-14': 'Partial — exported at 8:57 AM, twenty-seven minutes into the cash session. Three trades, three winners. One was nineteen seconds.'
 };
 
 /* ═══════════ nothing below needs editing ═══════════ */
@@ -578,8 +592,8 @@ var cls = function(n){ return n>0?'up':(n<0?'down':'neutral'); };
 
 /* ---- compute each trade ---- */
 function holdSecs(t){
-  var a = new Date(t.d+'T'+t.tIn), b = new Date(t.d+'T'+t.tOut);
-  if(b < a) b = new Date(b.getTime() + 864e5);   // trade crossed midnight
+  var a = new Date(t.d+'T'+t.tIn), b = new Date((t.dOut||t.d)+'T'+t.tOut);
+  if(!t.dOut && b < a) b = new Date(b.getTime() + 864e5);   // single midnight crossing
   var s = (b-a)/1000;
   return s>0 ? s : 0;
 }
