@@ -198,6 +198,7 @@ h2{
 .t-side.b{color:var(--cyan)}
 .t-px{color:var(--muted);font-size:11px}
 .t-moon{color:var(--cyan);font-size:9px;margin-left:5px;opacity:.75;vertical-align:1px}
+.t-liq{color:var(--amber);font-size:10px;margin-left:5px}
 .t-pts{text-align:right}
 .t-hold{text-align:right;color:var(--muted-dim);font-size:11px}
 .t-net{text-align:right;font-weight:700}
@@ -323,16 +324,17 @@ footer{
 
   <!-- HERO -->
   <header class="hero">
-    <div class="live-badge"><span class="pulse"></span> Live capital · Interactive Brokers</div>
+    <div class="live-badge"><span class="pulse"></span> Live capital · Interactive Brokers + NinjaTrader</div>
     <div class="day-line">
       <div class="day-counter" id="dayCounter">Day 001</div>
       <div class="day-since" id="daySince"></div>
     </div>
     <h1>Every trade.<br><em>Unedited.</em></h1>
     <p class="hero-sub">
-      This page is the complete record of a live futures account, posted trade by trade
-      with entry, exit, timestamp, and net result after commission. Nothing is filtered
-      and nothing is removed. It updates the same day I trade.
+      One trader, one record, two brokers. Interactive Brokers from August 25, 2026; NinjaTrader
+      from September 21. Every contract is here with entry, exit, timestamp and net result after
+      fees — including the trades that were force-closed by the broker, marked <span class="t-liq">⚠</span>.
+      Nothing is filtered and nothing is removed. Reconciled to both brokers' statements.
     </p>
 
     <div class="headline">
@@ -342,7 +344,7 @@ footer{
         <div class="hl-note" id="hNetSub">after commissions</div>
       </div>
       <div class="hl">
-        <div class="hl-label">Account equity</div>
+        <div class="hl-label">Contributed + P&amp;L</div>
         <div class="hl-val neutral" id="hEq">—</div>
         <div class="hl-note" id="hEqSub"></div>
       </div>
@@ -466,10 +468,10 @@ footer{
    ═══════════════════════════════════════════════════════════════ */
 
 var CONFIG = {
-  startEquity : 6000,        // funding amount
+  startEquity : 7500,        // capital contributed across both brokers: $6,000 IBKR (Aug 25) + ~$1,500 NinjaTrader (Sep 21). Update if the NT figure differs.
   startDate   : '2026-08-25',// first day of live trading
-  commPerSide : 0.61,        // commission per contract per side
-  sessionRoll : 17           // CME session rolls to next day at this hour (broker local time)
+  commPerSide : 0.61,        // IBKR commission per contract per side (NT legs carry their own `comm`)
+  sessionRoll : 17           // CME session rolls to next day at this hour (Central)
 };
 
 var TRADES = [
@@ -551,7 +553,62 @@ var TRADES = [
   { d:'2026-09-11', sym:'MNQ', side:'Short', qty:1, entry:29190.00, exit:29019.25, tIn:'00:44:30', dOut:'2026-09-13', tOut:'17:08:03' },
   { d:'2026-09-14', sym:'MNQ', side:'Long', qty:1, entry:28843.25, exit:28859.75, tIn:'08:05:45', tOut:'08:13:06' },
   { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29027.50, exit:29002.75, tIn:'08:49:12', tOut:'08:52:19' },
-  { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29017.75, exit:28997.75, tIn:'08:55:31', tOut:'08:55:50' }
+  { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29017.75, exit:28997.75, tIn:'08:55:30', tOut:'08:55:50' },
+  { d:'2026-09-14', sym:'MNQ', side:'Short', qty:1, entry:29283.75, exit:29279.75, tIn:'12:46:00', tOut:'13:12:35' },
+  { d:'2026-09-15', sym:'MNQ', side:'Short', qty:1, entry:29428.00, exit:29423.75, tIn:'07:19:15', tOut:'07:36:34' },
+  { d:'2026-09-15', sym:'MNQ', side:'Short', qty:1, entry:29458.75, exit:29442.00, tIn:'07:50:08', tOut:'08:08:04' },
+  { d:'2026-09-15', sym:'MNQ', side:'Short', qty:1, entry:29110.75, exit:29099.25, tIn:'08:30:11', tOut:'08:31:07' },
+  { d:'2026-09-15', sym:'MNQ', side:'Long', qty:1, entry:29028.50, exit:29034.25, tIn:'09:22:03', tOut:'09:24:36' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29061.25, exit:29075.75, tIn:'01:00:56', tOut:'07:45:04' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29156.25, exit:29124.25, tIn:'08:49:42', tOut:'09:13:26' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29171.75, exit:29163.75, tIn:'09:19:57', tOut:'09:22:43' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29218.25, exit:29172.75, tIn:'13:06:24', tOut:'13:12:26' },
+  { d:'2026-09-16', sym:'MNQ', side:'Long', qty:1, entry:28836.25, exit:28849.75, tIn:'14:13:39', tOut:'14:14:17' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:28938.00, exit:28965.75, tIn:'14:55:54', tOut:'14:59:26' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:28967.50, exit:29061.50, tIn:'14:59:55', tOut:'17:40:38' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29063.50, exit:29131.25, tIn:'17:41:05', tOut:'18:43:15' },
+  { d:'2026-09-16', sym:'MNQ', side:'Short', qty:1, entry:29429.00, exit:30465.75, tIn:'18:43:34', dOut:'2026-09-21', tOut:'09:19:05' },
+  { d:'2026-09-21', sym:'MNQ', side:'Short', qty:1, entry:30250.50, exit:30371.75, tIn:'05:36:06', tOut:'08:51:45', bk:'NT', comm:1.9273, liq:true },
+  { d:'2026-09-21', sym:'MNQ', side:'Short', qty:1, entry:30324.75, exit:30371.75, tIn:'08:44:22', tOut:'08:51:45', bk:'NT', comm:1.9273, liq:true },
+  { d:'2026-09-21', sym:'MNQ', side:'Short', qty:1, entry:30886.50, exit:30823.50, tIn:'20:32:41', tOut:'23:47:12', bk:'NT', comm:1.9273 },
+  { d:'2026-09-22', sym:'MNQ', side:'Short', qty:1, entry:30741.75, exit:30941.00, tIn:'03:41:38', tOut:'08:53:53', bk:'NT', comm:1.9273 },
+  { d:'2026-09-22', sym:'MNQ', side:'Short', qty:1, entry:30922.75, exit:30963.00, tIn:'08:55:58', tOut:'09:12:10', bk:'NT', comm:1.9273, liq:true },
+  { d:'2026-09-22', sym:'MNQ', side:'Short', qty:1, entry:30993.25, exit:30997.50, tIn:'13:20:31', tOut:'15:46:34', bk:'NT', comm:1.9273, liq:true },
+  { d:'2026-09-22', sym:'MNQ', side:'Short', qty:1, entry:31043.75, exit:31019.75, tIn:'17:19:50', tOut:'21:27:10', bk:'NT', comm:1.9273 },
+  { d:'2026-09-22', sym:'MNQ', side:'Short', qty:1, entry:31028.00, exit:31006.25, tIn:'23:05:21', dOut:'2026-09-23', tOut:'03:46:03', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30952.25, exit:30907.25, tIn:'07:35:14', tOut:'08:45:46', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30994.50, exit:30907.25, tIn:'08:30:27', tOut:'08:45:46', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Long', qty:1, entry:30666.25, exit:30691.25, tIn:'09:28:03', tOut:'09:29:38', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30798.25, exit:30764.00, tIn:'10:04:46', tOut:'10:17:26', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30812.50, exit:30774.00, tIn:'10:22:44', tOut:'10:29:02', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Long', qty:1, entry:30672.50, exit:30719.00, tIn:'11:54:38', tOut:'12:21:32', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30752.00, exit:30744.25, tIn:'12:45:21', tOut:'14:04:53', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30767.00, exit:30745.00, tIn:'14:35:32', tOut:'14:42:30', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MGC', side:'Long', qty:1, entry:4322.80, exit:4324.30, tIn:'17:19:34', tOut:'17:22:56', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30805.00, exit:30789.75, tIn:'17:01:00', tOut:'17:27:51', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Short', qty:1, entry:30814.00, exit:30789.75, tIn:'17:15:13', tOut:'17:27:51', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Long', qty:1, entry:30715.00, exit:30723.00, tIn:'19:46:56', tOut:'19:57:11', bk:'NT', comm:1.9273 },
+  { d:'2026-09-23', sym:'MNQ', side:'Long', qty:1, entry:30711.75, exit:30723.00, tIn:'19:51:06', tOut:'19:57:11', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30487.50, exit:30460.50, tIn:'07:14:49', tOut:'07:31:48', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30506.00, exit:30526.75, tIn:'08:15:57', tOut:'10:07:34', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30615.50, exit:30526.75, tIn:'08:48:09', tOut:'10:07:34', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30625.25, exit:30526.75, tIn:'09:27:25', tOut:'10:07:34', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30783.00, exit:30746.50, tIn:'11:56:28', tOut:'12:21:03', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30800.00, exit:30746.50, tIn:'11:57:02', tOut:'12:21:03', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30786.25, exit:30769.00, tIn:'13:58:35', tOut:'14:01:12', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MCL', side:'Long', qty:1, entry:94.34, exit:94.46, tIn:'17:18:27', tOut:'17:40:47', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30739.25, exit:30775.00, tIn:'20:11:07', tOut:'23:32:22', bk:'NT', comm:1.9273 },
+  { d:'2026-09-24', sym:'MNQ', side:'Short', qty:1, entry:30784.00, exit:30775.00, tIn:'22:01:46', tOut:'23:32:22', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30812.00, exit:30814.75, tIn:'00:17:11', tOut:'08:30:00', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30854.50, exit:30814.75, tIn:'00:49:48', tOut:'08:30:00', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30885.25, exit:30814.75, tIn:'01:11:54', tOut:'08:30:00', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30853.00, exit:30820.50, tIn:'10:32:32', tOut:'10:35:15', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30775.50, exit:30752.25, tIn:'10:40:39', tOut:'10:44:45', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30780.00, exit:30752.25, tIn:'10:41:47', tOut:'10:44:45', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30903.75, exit:30896.00, tIn:'11:04:26', tOut:'11:19:12', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30911.75, exit:30896.00, tIn:'11:04:56', tOut:'11:19:12', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30936.00, exit:30896.00, tIn:'11:06:31', tOut:'11:19:12', bk:'NT', comm:1.9273 },
+  { d:'2026-09-25', sym:'MNQ', side:'Short', qty:1, entry:30941.50, exit:30896.00, tIn:'11:16:38', tOut:'11:19:12', bk:'NT', comm:1.9273 }
 ];
 
 /* Contract point values — add any instrument you trade */
@@ -577,7 +634,15 @@ var NOTES = {
   '2026-09-09': 'Ten trades, three losses — all three cut inside six minutes, the largest $85. Seven winners, +$208.80, new equity high. This is what the ledger looks like when the exits work. Still trading at 5:43 AM, still taking 25-second scalps, but nothing was held past the point where the stop should have been. First export taken after the close.',
   '2026-09-10': 'Five trades, five winners, +$158.90. Two longs, both won — the long side is now positive overall. Holds between six minutes and an hour. Clean session.',
   '2026-09-11': 'Two trades, both winners, +$371.06 — the best session in the record, and almost all of it is one trade. Short at 29,190 at 12:44 AM Friday, covered at 29,019 at 5:08 PM Sunday. Sixty-four hours. Through Friday, through the weekend, through the Sunday reopen. +$340 on one MNQ, a new best by a wide margin. That is a weekend hold on 10x leverage, and it worked. The 16-hour hold on Sep 3 lost $325. This one won $340. I know exactly what that pairing teaches, and I don\'t trust it.',
-  '2026-09-14': 'Partial — exported at 8:57 AM, twenty-seven minutes into the cash session. Three trades, three winners. One was nineteen seconds.'
+  '2026-09-14': 'Four trades, four winners, +$125.62. One was nineteen seconds. Quiet day.',
+  '2026-09-15': 'Four trades, four winners, +$71.62. First trades in the December contract as September approached expiry.',
+  '2026-09-16': 'Seven trades, 4W/3L. Through 2:14 PM it was 4W/1L and +$163, the account at its all-time high — and then it came apart. At 2:55 PM I shorted, was wrong, cut it in three minutes. Re-shorted thirty seconds later and held that one through the close and into the reopen for −94 points. Both in the September contract two days before expiry, in a thin and dislocated tape.',
+  '2026-09-17': 'The trade that ended the IBKR record. Re-shorted a third time at 5:41 PM, held an hour for −68. Re-shorted a fourth time at 6:43 PM, this time in the December contract at 29,429. Held it through Thursday, Friday, the weekend, and the Monday open. Covered Monday at 10:19 AM at 30,465.75. −1,036.75 points. −$2,074.72. Four days, fourteen hours, thirty-five minutes. The four consecutive evening shorts together: −$2,457. The account was up $1,962 at 2:14 PM Wednesday and finished the record down $495 — a $2,457 drawdown, 31% of peak, in four trades.',
+  '2026-09-21': 'First NinjaTrader session, funded that morning. Short one at 5:36 AM, added a second at 8:44 AM as it rose, and at 8:51 AM the broker force-closed both — my first auto-liquidation, −$340. Tried to re-short two contracts three minutes later; the order was rejected for margin.',
+  '2026-09-22': 'Four trades, one winner, −$369. Short at 3:41 AM, held five hours into the open for −$400, my largest NinjaTrader loss. Re-shorted two minutes later and was auto-liquidated sixteen minutes after that. Auto-liquidated a third time at 3:46 PM. Two sessions in: −$710, 47% of the capital in this account, three forced closes.',
+  '2026-09-23': 'Ten contracts, ten winners, +$685 — the day that recovered the first two. Two longs, both won. One gold trade for $13. The pattern that will define this account showed up at 7:35 AM: short, price rises, add — covered both for +$261 when it dipped.',
+  '2026-09-24': 'Twelve contracts, eleven winners, +$711. The 8:15 AM campaign: short one, price rises 110 points, add, add — three lots — and cover all three for +$327 when it dropped. Every multi-lot position this week has been built by adding against the move. All of them have paid. A crude oil trade for $10 at 5:18 PM.',
+  '2026-09-25': 'Thirteen contracts, eleven winners, +$533. Started the evening before: short two at 8:11 PM, added at a worse price, held three hours, exited for −$57. Then short three lots between 12:17 AM and 1:11 AM, averaged up 73 points, held eight hours overnight to the 8:30 AM open for +$209. I did place a stop on that position — at 2:20 AM, 230 points above the average entry, the only stop order in the whole record; it was never close. Then the 11:04 AM campaign: four lots in twelve minutes, each add higher, covered all four for +$210. Largest position of the record, about $247,000 notional on a $2,700 account.'
 };
 
 /* ═══════════ nothing below needs editing ═══════════ */
@@ -621,7 +686,7 @@ var T = TRADES.map(function(t,i){
   var m = MULT[t.sym] || 1;
   var pts = (t.side==='Short') ? (t.entry - t.exit) : (t.exit - t.entry);
   var gross = pts * m * t.qty;
-  var comm = CONFIG.commPerSide * 2 * t.qty;
+  var comm = (t.comm!==undefined ? t.comm : CONFIG.commPerSide * 2) * t.qty;
   return Object.assign({}, t, {
     i:i+1, mult:m, pts:pts, gross:gross, comm:comm,
     net: gross - comm, hold: holdSecs(t),
@@ -682,7 +747,7 @@ var worstDay = days.length ? Math.min.apply(null,days.map(function(g){return g.n
 
 /* ---- render hero ---- */
 $('dayCounter').textContent = 'Day '+String(days.length).padStart(3,'0');
-$('daySince').textContent = 'Live since '+new Date(CONFIG.startDate+'T12:00:00')
+$('daySince').textContent = 'Funded '+new Date(CONFIG.startDate+'T12:00:00')
   .toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
 
 $('hNet').textContent = signed(netTotal);
@@ -690,7 +755,7 @@ $('hNet').className = 'hl-val '+cls(netTotal);
 $('hNetSub').textContent = money(totComm)+' paid in commissions';
 
 $('hEq').textContent = money(equity);
-$('hEqSub').textContent = 'funded at '+money(CONFIG.startEquity,0)+' · trading P&L only';
+$('hEqSub').textContent = money(CONFIG.startEquity,0)+' contributed · trading P&L only';
 
 $('hRet').textContent = (retPct>=0?'+':'')+retPct.toFixed(2)+'%';
 $('hRet').className = 'hl-val '+cls(retPct);
@@ -727,7 +792,7 @@ $('tapeBody').innerHTML = T.map(function(t){
     '<div class="t-time">'+t.d.slice(5)+' <span style="color:var(--muted-dim)">'+t.tIn.slice(0,5)+'</span>'+
       (t.night?'<span class="t-moon" title="Overnight Globex session">◗</span>':'')+'</div>'+
     '<div class="t-sym">'+t.sym+'</div>'+
-    '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+'</div>'+
+    '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+(t.liq?'<span class="t-liq" title="Closed by broker auto-liquidation">⚠</span>':'')+'</div>'+
     '<div class="t-px">'+t.entry.toFixed(2)+' → '+t.exit.toFixed(2)+'</div>'+
     '<div class="t-pts '+cls(t.pts)+'">'+(t.pts>=0?'+':'')+t.pts.toFixed(2)+'</div>'+
     '<div class="t-hold">'+fmtHold(t.hold)+'</div>'+
@@ -806,7 +871,7 @@ function showDay(key){
       '<div class="t-pts">Points</div><div class="t-hold">Hold</div><div class="t-net">Net P&amp;L</div></div>'+
     '<div class="dd-rows">'+list.map(function(t){
       return '<div class="dd-row">'+
-        '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+(t.night?'<span class="t-moon">◗</span>':'')+'</div>'+
+        '<div class="t-side '+(t.side==='Short'?'s':'b')+'">'+t.side+(t.night?'<span class="t-moon">◗</span>':'')+(t.liq?'<span class="t-liq" title="Closed by broker auto-liquidation">⚠</span>':'')+'</div>'+
         '<div class="t-px">'+t.entry.toFixed(2)+' → '+t.exit.toFixed(2)+'</div>'+
         '<div class="t-pts '+cls(t.pts)+'">'+(t.pts>=0?'+':'')+t.pts.toFixed(2)+'</div>'+
         '<div class="t-hold">'+fmtHold(t.hold)+'</div>'+
@@ -830,7 +895,11 @@ if(days.length) showDay(days[days.length-1].d);
 
 /* ---- standing note ---- */
 var n = T.length;
-$('sampleNote').innerHTML = n < 100
+$('sampleNote').innerHTML = '<strong>The Interactive Brokers phase of this record — 93 trades, −$495 — is closed and stays here unedited.</strong> '+
+  'Eighteen losses, five of which cost eighty percent of the money lost: every one a short held into a rally without a resting stop, the last for four and a half days. '+
+  'NinjaTrader trading began September 21 with the same process and roughly four times the size. Its first two sessions ended in three broker-forced liquidations and a 47% drawdown on the capital in that account; the next three sessions recovered it. '+
+  'The combined win rate is above eighty percent and the average loss is still roughly three times the average win. That is the shape this record has had from the first week, and it is the thing this page exists to make impossible to ignore.';
+var _legacy = n < 100
   ? '<strong>Sample size: '+n+' trade'+(n===1?'':'s')+' across '+days.length+' session'+(days.length===1?'':'s')+'.</strong> '+
     'That is not enough to demonstrate an edge, and I am not going to pretend otherwise. '+
     'These numbers are noise until the sample is several hundred trades deep. The page exists '+
