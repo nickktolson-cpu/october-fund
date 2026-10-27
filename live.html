@@ -459,7 +459,7 @@ footer{
 <script>
 /* ═══════════════════════════════════════════════════════════════
    EDIT ONLY THIS BLOCK.
-   Add one line per trade. Everything else on the page recalculates.
+   Add one line per contract. Trades (flat-to-flat positions) and everything else recalculate.
    side: 'Short' or 'Long'   ·   times are 24h HH:MM:SS
    dOut: exit date — only needed when a trade is held more than one night
 
@@ -1465,28 +1465,56 @@ var T = TRADES.map(function(t,i){
   });
 });
 
+/* ---- positions: one round trip from flat to flat, whatever the size ----
+   The ledger is one line per contract (what the broker exports). A "trade"
+   here is a position: every leg that was open at the same time, per instrument. */
+var P=[];
+(function(){
+  var bySym={};
+  T.forEach(function(t){ (bySym[t.sym]=bySym[t.sym]||[]).push(t); });
+  Object.keys(bySym).forEach(function(s){
+    var L=bySym[s].slice().sort(function(a,b){ return (a.d+a.tIn)<(b.d+b.tIn)?-1:1; });
+    var cur=null;
+    L.forEach(function(t){
+      var tin=t.d+'T'+t.tIn, tout=(t.dOut||t.d)+'T'+t.tOut;
+      if(!cur || tin>=cur.maxOut){
+        cur={sym:s,side:t.side,legs:[],net:0,start:tin,maxOut:tout,sess:t.sess,night:t.night,qty:0,comm:0};
+        P.push(cur);
+      }
+      cur.legs.push(t); cur.net+=t.net; cur.comm+=t.comm; cur.qty++;
+      if(tout>cur.maxOut) cur.maxOut=tout;
+    });
+  });
+  P.sort(function(a,b){ return a.start<b.start?-1:1; });
+  P.forEach(function(q,i){ q.i=i+1; q.hold=(new Date(q.maxOut)-new Date(q.start))/1000; });
+})();
+
 /* ---- aggregate ---- */
 var netTotal = T.reduce(function(a,t){return a+t.net;},0);
 var equity   = CONFIG.startEquity + netTotal;
 var retPct   = CONFIG.startEquity ? (netTotal/CONFIG.startEquity*100) : 0;
-var wins     = T.filter(function(t){return t.net>0;});
-var losses   = T.filter(function(t){return t.net<0;});
-var winRate  = T.length ? wins.length/T.length*100 : 0;
-var gProfit  = wins.reduce(function(a,t){return a+t.net;},0);
-var gLoss    = Math.abs(losses.reduce(function(a,t){return a+t.net;},0));
+var wins     = P.filter(function(q){return q.net>0;});
+var losses   = P.filter(function(q){return q.net<0;});
+var winRate  = P.length ? wins.length/P.length*100 : 0;
+var cWins    = T.filter(function(t){return t.net>0;}).length;
+var cWinRate = T.length ? cWins/T.length*100 : 0;
+var gProfit  = wins.reduce(function(a,q){return a+q.net;},0);
+var gLoss    = Math.abs(losses.reduce(function(a,q){return a+q.net;},0));
 var pf       = gLoss>0 ? gProfit/gLoss : (gProfit>0?Infinity:0);
-var expect   = T.length ? netTotal/T.length : 0;
+var expect   = P.length ? netTotal/P.length : 0;
 var avgWin   = wins.length ? gProfit/wins.length : 0;
 var avgLoss  = losses.length ? gLoss/losses.length : 0;
 var rr       = avgLoss>0 ? avgWin/avgLoss : (avgWin>0?Infinity:0);
 var totComm  = T.reduce(function(a,t){return a+t.comm;},0);
-var avgHold  = T.length ? T.reduce(function(a,t){return a+t.hold;},0)/T.length : 0;
-var nShort   = T.filter(function(t){return t.side==='Short';}).length;
-var nLong    = T.length - nShort;
-var netShort = T.reduce(function(a,t){return a+(t.side==='Short'?t.net:0);},0);
-var netLong  = T.reduce(function(a,t){return a+(t.side==='Long' ?t.net:0);},0);
+var avgHold  = P.length ? P.reduce(function(a,q){return a+q.hold;},0)/P.length : 0;
+var avgSize  = P.length ? T.length/P.length : 0;
+var maxSize  = P.length ? Math.max.apply(null,P.map(function(q){return q.qty;})) : 0;
+var nShort   = P.filter(function(q){return q.side==='Short';}).length;
+var nLong    = P.length - nShort;
+var netShort = P.reduce(function(a,q){return a+(q.side==='Short'?q.net:0);},0);
+var netLong  = P.reduce(function(a,q){return a+(q.side==='Long' ?q.net:0);},0);
 var dirSide  = nShort>=nLong ? 'short' : 'long';
-var dirPct   = T.length ? Math.max(nShort,nLong)/T.length*100 : 0;
+var dirPct   = P.length ? Math.max(nShort,nLong)/P.length*100 : 0;
 var dirSub   = (nShort? nShort+'S '+signed(netShort) : '')+
                (nShort&&nLong? ' · ' : '')+
                (nLong ? nLong+'L '+signed(netLong) : '');
@@ -1507,7 +1535,11 @@ T.forEach(function(t){
   if(!byDay[t.sess]){ byDay[t.sess]={d:t.sess,n:0,w:0,l:0,net:0,night:0}; order.push(t.sess); }
   var g=byDay[t.sess]; g.n++; g.net+=t.net;
   if(t.night) g.night++;
-  if(t.net>0) g.w++; else if(t.net<0) g.l++;
+});
+P.forEach(function(q){
+  var g=byDay[q.sess]; if(!g) return;
+  g.p=(g.p||0)+1;
+  if(q.net>0) g.w++; else if(q.net<0) g.l++;
 });
 order.sort();
 var days = order.map(function(d){return byDay[d];});
@@ -1539,15 +1571,15 @@ $('curveRet').className = 'curve-ret '+cls(retPct);
 var pfTxt = (pf===Infinity) ? '∞' : pf.toFixed(2);
 var rrTxt = (rr===Infinity) ? '∞' : rr.toFixed(2)+' : 1';
 var stats = [
-  ['Trades',        String(T.length),               wins.length+'W / '+losses.length+'L'],
-  ['Win rate',      winRate.toFixed(1)+'%',         'across '+days.length+' session'+(days.length===1?'':'s')],
+  ['Trades',        String(P.length),               wins.length+'W / '+losses.length+'L · '+T.length+' contracts'],
+  ['Win rate',      winRate.toFixed(1)+'%',         cWinRate.toFixed(0)+'% per contract · '+days.length+' session'+(days.length===1?'':'s')],
   ['Profit factor', pfTxt,                          money(gProfit)+' / '+money(gLoss)],
   ['Expectancy',    signed(expect),                 'per trade'],
   ['Avg win : loss',rrTxt,                          money(avgWin)+' vs '+money(avgLoss)],
   ['Max drawdown',  maxDD>0?'-'+money(maxDD):'$0.00', maxDD>0?maxDDpct.toFixed(2)+'% of peak':'no drawdown yet'],
   ['Best session',  signed(bestDay),                days.length>1 ? 'worst '+signed(worstDay) : 'only session so far'],
   ['Direction',     dirPct.toFixed(0)+'% '+dirSide, dirSub],
-  ['Avg hold',      fmtHold(avgHold),               'time in market']
+  ['Avg hold',      fmtHold(avgHold),               'flat to flat · avg size '+avgSize.toFixed(1)+', max '+maxSize]
 ];
 $('statGrid').innerHTML = stats.map(function(s){
   return '<div class="stat"><div class="stat-label">'+s[0]+'</div>'+
@@ -1605,7 +1637,7 @@ function buildCal(){
         return '<div class="cal-cell has '+(g.net>0?'w':(g.net<0?'l':''))+'" data-d="'+key+'" tabindex="0">'+
           '<div class="cal-day">'+d+(g.night?'<span class="t-moon">◗</span>':'')+'</div>'+
           '<div class="cal-net '+cls(g.net)+'">'+(g.net>=0?'+':'−')+Math.abs(g.net).toFixed(2)+'</div>'+
-          '<div class="cal-n">'+g.n+(g.n===1?' trade':' trades')+'</div>'+
+          '<div class="cal-n">'+(g.p||0)+((g.p||0)===1?' trade':' trades')+'</div>'+
         '</div>';
       }).join('');
     }).join('');
@@ -1635,7 +1667,7 @@ function showDay(key){
   $('dayDetail').innerHTML=
     '<div class="dd-top"><div>'+
       '<div class="dd-date">'+new Date(key+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'</div>'+
-      '<div class="dd-meta">'+g.n+' trade'+(g.n===1?'':'s')+' · '+g.w+'W / '+g.l+'L · closed at '+money(g.eq)+'</div>'+
+      '<div class="dd-meta">'+(g.p||0)+' trade'+((g.p||0)===1?'':'s')+' · '+g.w+'W / '+g.l+'L · '+g.n+' contract'+(g.n===1?'':'s')+' · closed at '+money(g.eq)+'</div>'+
     '</div><div class="dd-net '+cls(g.net)+'">'+signed(g.net)+'</div></div>'+
     (note?'<div class="dd-note">'+note+'</div>':'')+
     '<div class="dd-head"><div>Side</div><div>Entry → Exit</div>'+
@@ -1666,7 +1698,7 @@ if(days.length) showDay(days[days.length-1].d);
 
 /* ---- standing note ---- */
 var n = T.length;
-$('sampleNote').innerHTML = '<strong>The Interactive Brokers phase of this record — 93 trades, −$495 — is closed and stays here unedited.</strong> '+
+$('sampleNote').innerHTML = '<strong>The Interactive Brokers phase of this record — 93 contracts, −$495 — is closed and stays here unedited.</strong> '+
   'Eighteen losses, five of which cost eighty percent of the money lost: every one a short held into a rally without a resting stop, the last for four and a half days. '+
   'NinjaTrader trading began September 21 with the same process and roughly four times the size. Its first two sessions ended in three broker-forced liquidations and a 47% drawdown on the capital in that account; the next three sessions recovered it. The following Monday lost $1,685 on long positions of six and eight contracts. October 5–6, the two days after the account was reset to $5,000 with a written rule set, lost $4,106 — 82% of it — on an eight-lot and a four-lot short, both averaged against the move. After a coaching weekend, the four days from Tuesday October 13 through Friday October 16 were the first stretch in this record with no contract losing more than $20 and nothing held past two and a half hours — 63 contracts, 54 winners, +$1,833. The afternoon before that stretch began, a two-lot long was held overnight for −$337. '+
   'The combined win rate is above eighty percent and the average loss is still roughly three times the average win. That is the shape this record has had from the first week, and it is the thing this page exists to make impossible to ignore.';
